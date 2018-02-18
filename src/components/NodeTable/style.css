@@ -1,0 +1,26 @@
+.NodeTable-top10 {
+    background: lightgreen;
+}
+
+.NodeTable-top10-check {    
+    padding: 4px;
+    color: #237804;    
+}
+
+.NodeTable-top10-close {    
+    padding: 4px;
+    color: #ad2102;    
+}
+
+
+.NodeTable-right {
+    float: right;
+}
+
+.NodeTable-issues {    
+    color: #ad2102;    
+}
+
+.NoteTable-legend {
+    float: right;    
+}
