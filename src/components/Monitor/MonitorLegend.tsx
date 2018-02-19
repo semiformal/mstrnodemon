@@ -26,16 +26,16 @@ export const MonitorLegend = () => (
     <LegendDiv>
         Legend
         <hr />
-        <HeaderDiv style={{ fontWeight: 'bold' }}>ActiveTime</HeaderDiv>
-        <TextDiv style={{ marginLeft: '10px' }}>
+        <HeaderDiv>ActiveTime</HeaderDiv>
+        <TextDiv>
             Node has not been active for more than # of Masternodes * 2.5 minutes
         </TextDiv>
-        <HeaderDiv style={{ fontWeight: 'bold' }}>Status</HeaderDiv>
-        <TextDiv style={{ marginLeft: '10px' }}>
+        <HeaderDiv>Status</HeaderDiv>
+        <TextDiv>
             Node status is not ENABLED or WATCHDOG_EXPIRED
         </TextDiv>
-        <HeaderDiv style={{ fontWeight: 'bold' }}>Protocol</HeaderDiv>
-        <TextDiv style={{ marginLeft: '10px' }}>
+        <HeaderDiv>Protocol</HeaderDiv>
+        <TextDiv>
             Node protocol is older than the is allowed. Node requires update.
         </TextDiv>
     </LegendDiv>);
