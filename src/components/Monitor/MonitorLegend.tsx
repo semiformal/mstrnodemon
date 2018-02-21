@@ -5,13 +5,14 @@ import styled from 'styled-components';
 const LegendDiv = styled.div`
     width: 600px;
     height: 200px;
-    background: #d9d9d9;
+    background: #F9F9F9;
     padding-left: 10px;
     padding-right: 10px;
-    padding-top: 5px;
-    margin-top: 10px;
-    margin-left: 20px;
-    border-radius: '4px 4px 0 0;
+    padding-top: 10px;
+    margin-top: 20px;
+    margin-left: 0px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 `;
 
 const HeaderDiv = styled.div`

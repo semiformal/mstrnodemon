@@ -2,14 +2,14 @@
     background: lightgreen;
 }
 
-.NodeTable-top10-check {    
+.NodeTable-top10-check {
     padding: 4px;
-    color: #237804;    
+    color: #237804;
 }
 
-.NodeTable-top10-close {    
+.NodeTable-top10-close {
     padding: 4px;
-    color: #ad2102;    
+    color: #ad2102;
 }
 
 
@@ -17,10 +17,28 @@
     float: right;
 }
 
-.NodeTable-issues {    
-    color: #ad2102;    
+.NodeTable-issues {
+    color: #ad2102;
 }
 
 .NoteTable-legend {
-    float: right;    
+    float: right;
+}
+.rt-th.rt-resizable-header.-cursor-pointer {
+    padding: 10px;
+}
+.rt-tr-group {
+    text-align: center;
+}
+.rt-thead.-header {
+    font-weight: 800;
+}
+
+.ReactTable.-highlight {
+    background: white;
+    border-radius: 6px;
+}
+
+.rt-tr.-even {
+    background: #F9F9F9;
 }

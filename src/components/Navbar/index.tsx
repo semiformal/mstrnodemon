@@ -20,8 +20,7 @@ export class Navbar extends React.Component<any, any> {
                 <Layout.Header className="header" >
                     <div className="logo" />
                     <Menu
-                        theme="dark"
-                        mode="horizontal"                        
+                        mode="horizontal"
                         selectedKeys={[this.props.router.location.pathname]}
                     // style={{ lineHeight: '64px' }}
                     >

@@ -41,7 +41,7 @@ export class NodeTableStatus extends React.Component<any, any> {
         };
 
         return (
-            <div style={{ display: 'flow-root' }}>
+            <div style={{ display: 'flow-root', padding: '10px' }}>
                 <span style={alertStyle}>
                     Data from: {updatedTime.fromNow()}&nbsp;
                 </span>
