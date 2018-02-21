@@ -63,7 +63,7 @@ export class NodeTable extends React.Component<any, any> {
         Cell: (row) => {
             const dur = moment.duration(row.value * 1000);
             return `
-            ${this._getUnit(dur, 'd', true)} 
+            ${this._getUnit(dur, 'd', true)}
             ${this._getUnit(dur, 'h', true)}
             ${this._getUnit(dur, 'm', true)}
             ${this._getUnit(dur, 's', false)}`;
@@ -79,15 +79,15 @@ export class NodeTable extends React.Component<any, any> {
     },
     {
         Header: 'Payable',
-        accessor: 'rank',        
-        maxWidth: 70,   
-        minWidth: 50,     
+        accessor: 'rank',
+        maxWidth: 120,   
+        minWidth: 50,
         filterable: false,
         Cell: (row) => (
-            <div className={classnames({ 'NodeTable-top10': false })}>            
+            <div className={classnames({ 'NodeTable-top10': false })}>
                 {row.original.top10 && row.original.issues.length === 0 ?
                     <Icon type="check" className="NodeTable-top10-check" /> :
-                    row.value === 99999 ? 
+                    row.value === 99999 ?
                         <Icon type="close" className="NodeTable-top10-close" /> :
                         row.value}
             </div>
@@ -150,7 +150,7 @@ export class NodeTable extends React.Component<any, any> {
                 issues.push('ActiveTime');
             }
 
-            // TODO: make sure it has at least as many confirmations as there are masternodes            
+            // TODO: make sure it has at least as many confirmations as there are masternodes
             // if(GetUTXOConfirmations(mnpair.first) < nMnCount) continue;
 
             let rank = 99999;
@@ -212,7 +212,7 @@ export class NodeTable extends React.Component<any, any> {
             let paidTime = moment.unix(value).utc();
             let dur = moment.duration(moment.utc().diff(paidTime));
             return `
-        ${this._getUnit(dur, 'd', true)} 
+        ${this._getUnit(dur, 'd', true)}
         ${this._getUnit(dur, 'h', true)}
         ${this._getUnit(dur, 'm', true)}
         ${this._getUnit(dur, 's', true)}`;

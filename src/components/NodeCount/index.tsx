@@ -36,14 +36,14 @@ class NodeCountInner extends React.Component<any, any> {
         const counts = this.props.data;
         return (
             <div className="NodeCount-counts">
-             Total: {counts.count}&nbsp;<br/>
-             PreEnabled: {counts.PRE_ENABLED}&nbsp;
-             Enabled: {counts.ENABLED}&nbsp;
-             NewStart: {counts.NEW_START_REQUIRED}&nbsp;
-             Watchdog: {counts.WATCHDOG_EXPIRED}&nbsp;
-             PosBan: {counts.POSE_BAN}&nbsp;
-             Expired: {counts.EXPIRED}&nbsp;
-             Update: {counts.UPDATE_REQUIRED}
+             <span>Total</span>: {counts.count}&nbsp;<br/>
+             <span>PreEnabled</span>: {counts.PRE_ENABLED}&nbsp;
+             <span>Enabled</span>: {counts.ENABLED}&nbsp;
+             <span>NewStart</span>: {counts.NEW_START_REQUIRED}&nbsp;
+             <span>Watchdog</span>: {counts.WATCHDOG_EXPIRED}&nbsp;
+             <span>PosBan</span>: {counts.POSE_BAN}&nbsp;
+             <span>Expired</span>: {counts.EXPIRED}&nbsp;
+             <span>Update</span>: {counts.UPDATE_REQUIRED}
             </div>);
     }
 

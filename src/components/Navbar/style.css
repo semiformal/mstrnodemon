@@ -1,3 +1,9 @@
 .layout .header {
     height: 48px;
+    background: white;
+}
+
+.layout .header a{
+  font-size: 16px;
+  font-family: Montserrat,sans-serif;
 }
