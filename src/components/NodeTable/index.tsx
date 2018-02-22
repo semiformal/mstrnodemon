@@ -182,7 +182,7 @@ export class NodeTable extends React.Component<any, any> {
         tableData = _.sortBy(tableData, 'rank');
 
         const StyledTable = styled(ReactTable) `
-            background: white;
+            background: white !important;
             border-radius: 6px;
             ${shadow()}
         `;
