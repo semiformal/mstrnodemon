@@ -11,6 +11,8 @@ import gql from 'graphql-tag';
 // import { Header, Content, Footer } from 'antd/lib/layout';
 import ReactTable from 'react-table';
 import * as _ from 'lodash';
+import styled from 'styled-components';
+import { shadow } from '../../styles/style-utils';
 
 const COUNT_QUERY = gql`
   query {
@@ -33,18 +35,33 @@ type Response = {
 class NodeCountInner extends React.Component<any, any> {
 
     render() {
+
+        const NodeCountDiv = styled.div`
+            color: white;
+            background-color: #2E3644;
+            padding: 20px;
+            border-radius: 6px;      
+            ${shadow()}
+        `;
+
+        const NodeCountSpan = styled.span`
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding-right: 0px;
+        `;
+
         const counts = this.props.data;
         return (
-            <div className="NodeCount-counts">
-             <span>Total</span>: {counts.count}&nbsp;<br/>
-             <span>PreEnabled</span>: {counts.PRE_ENABLED}&nbsp;
-             <span>Enabled</span>: {counts.ENABLED}&nbsp;
-             <span>NewStart</span>: {counts.NEW_START_REQUIRED}&nbsp;
-             <span>Watchdog</span>: {counts.WATCHDOG_EXPIRED}&nbsp;
-             <span>PosBan</span>: {counts.POSE_BAN}&nbsp;
-             <span>Expired</span>: {counts.EXPIRED}&nbsp;
-             <span>Update</span>: {counts.UPDATE_REQUIRED}
-            </div>);
+            <NodeCountDiv>
+                <NodeCountSpan>Total</NodeCountSpan>: {counts.count}&nbsp;<br />
+                <NodeCountSpan>PreEnabled</NodeCountSpan>: {counts.PRE_ENABLED}&nbsp;&nbsp;
+                <NodeCountSpan>Enabled</NodeCountSpan>: {counts.ENABLED}&nbsp;&nbsp;
+                <NodeCountSpan>NewStart</NodeCountSpan>: {counts.NEW_START_REQUIRED}&nbsp;&nbsp;
+                <NodeCountSpan>Watchdog</NodeCountSpan>: {counts.WATCHDOG_EXPIRED}&nbsp;&nbsp;
+                <NodeCountSpan>PosBan</NodeCountSpan>: {counts.POSE_BAN}&nbsp;&nbsp;
+                <NodeCountSpan>Expired</NodeCountSpan>: {counts.EXPIRED}&nbsp;&nbsp;
+                <NodeCountSpan>Update</NodeCountSpan>: {counts.UPDATE_REQUIRED}
+            </NodeCountDiv>);
     }
 
 }
@@ -63,7 +80,7 @@ export const NodeCount = queryNode(({ data: data }) => {
     }
     if (Boolean(data.nodecount)) {
         let counts = data.nodecount;
-        return <NodeCountInner data={counts}/>;
+        return <NodeCountInner data={counts} />;
     }
 
     return <div>Something awful</div>;
