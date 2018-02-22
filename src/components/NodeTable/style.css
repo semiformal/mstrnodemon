@@ -12,7 +12,6 @@
     color: #ad2102;
 }
 
-
 .NodeTable-right {
     float: right;
 }
@@ -27,18 +26,18 @@
 .rt-th.rt-resizable-header.-cursor-pointer {
     padding: 10px;
 }
-.rt-tr-group {
+.rt-tr-group {        
     text-align: center;
 }
 .rt-thead.-header {
     font-weight: 800;
 }
 
-.ReactTable.-highlight {
-    background: white;
-    border-radius: 6px;
+.ReactTable.-striped {
+    background: #F9F9F9;
 }
 
-.rt-tr.-even {
-    background: #F9F9F9;
+.ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover{     
+    background: #ddd;
+    box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.12), 0px 1px 1px 1px rgba(0,0,0,0.24);
 }
