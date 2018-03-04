@@ -48,7 +48,8 @@ const rootStores = {
 };
 
 const client = new ApolloClient({
-  link: new HttpLink({ uri: 'https://api.graph.cool/simple/v1/cjdghvl9j63on0185hu1km26a' }),
+  // link: new HttpLink({ uri: 'https://api.graph.cool/simple/v1/nodemon' }),
+  link: new HttpLink({ uri: 'https://api.graph.cool/simple/v1/cjdy72gsd0kbj0186ovbmk5r8' }),
   cache: new InMemoryCache()
 });
 

@@ -21,7 +21,21 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
 const MN_QUERY = gql`
   query {
-    allMasternodes {
+    a1: allMasternodes {
+      id,
+      status,
+      outpoint,
+      activeseconds,
+      id,
+      ip,
+      lastpaidblock,
+      lastpaidtime,
+      lastseen,
+      payee,
+      protocol,
+      updatetime 
+    }
+    a2: allMasternodes(skip: 1000) {
       id,
       status,
       outpoint,
@@ -156,11 +170,13 @@ export default allNodes(({ data: data }) => {
     return <div>Loading</div>;
   }
   if (Boolean(data.error)) {
-    return <h1>ERROR</h1>;
+    return <div><h1>ERROR</h1><div>{data.error}</div></div>;    
   }
-  if (Boolean(data.allMasternodes)) {
+  let allMasternodes = _.union(data.a1, data.a2);
+  
+  if (Boolean(allMasternodes)) {
     return (
-      <RenderData nodes={data.allMasternodes} />
+      <RenderData nodes={allMasternodes} />
     );
   }
 
