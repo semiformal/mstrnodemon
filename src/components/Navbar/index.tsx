@@ -7,6 +7,8 @@ import { Layout, Menu, Breadcrumb } from 'antd';
 import { Link, NavLink } from 'react-router-dom';
 // import { withRouter } from 'react-router-dom';
 // import { Header, Content, Footer } from 'antd/lib/layout';
+import styled from 'styled-components';
+import { shadow } from '../../styles/style-utils';
 
 @inject(STORE_TODO, STORE_ROUTER)
 @observer
@@ -15,11 +17,33 @@ export class Navbar extends React.Component<any, any> {
     render() {
         // let router =  this.props.router;
         // let props = this.props;
+
+        const LayoutHeader = styled(Layout.Header)`
+            height: 48px;
+            background: white;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        `;
+
+        const LayoutContent = styled(Layout.Content)`
+            background: rgb(240,240,240);  
+        `;
+
+        const LayoutFooter = styled(Layout.Footer)`
+            background: white;
+            margin-top: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        `;
+
+        const MenuStyled = styled(Menu as any)`
+            border-bottom: 0;
+        `;
+
         return (
             <Layout className="layout" >
-                <Layout.Header className="header" >
+                <LayoutHeader className="header" >
                     <div className="logo" />
-                    <Menu
+                    <MenuStyled
                         mode="horizontal"
                         selectedKeys={[this.props.router.location.pathname]}
                     // style={{ lineHeight: '64px' }}
@@ -27,9 +51,9 @@ export class Navbar extends React.Component<any, any> {
                         {/* <Menu.Item key="/"><Link to="/">Home</Link></Menu.Item> */}
                         <Menu.Item key="/monitor"><Link to="/monitor">Monitor</Link></Menu.Item>
                         <Menu.Item key="/hosting"><a href="http://masternodes.work">Hosting</a></Menu.Item>
-                    </Menu>
-                </Layout.Header>
-                <Layout.Content
+                    </MenuStyled>
+                </LayoutHeader>
+                <LayoutContent
                     style={{ padding: '12px 50px' }}
                     className="content"
                 >
@@ -40,12 +64,12 @@ export class Navbar extends React.Component<any, any> {
                     </Breadcrumb> */}
                     {/* <div style={{ padding: 24, minHeight: 280 }}>{this.props.children}</div> */}
                     {this.props.children}
-                </Layout.Content>
-                <Layout.Footer style={{ textAlign: 'center' }} className="footer">
+                </LayoutContent>
+                <LayoutFooter style={{ textAlign: 'center' }} className="footer">
                     Copyright 2018 © C2CV Holdings, LLC. All rights reserved.<br /><br />
                     With $PAC Launch just starting we are working on finishing our
                     Terms and Privacy Policy.
-                </Layout.Footer>
+                </LayoutFooter>
             </Layout>
         );
         // return (

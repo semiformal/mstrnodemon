@@ -16,6 +16,8 @@ import * as classnames from 'classnames';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as qs from 'qs';
+import styled from 'styled-components';
+import { shadow } from '../../styles/style-utils';
 
 @inject(STORE_ROUTER)
 export class NodeTable extends React.Component<any, any> {
@@ -80,7 +82,7 @@ export class NodeTable extends React.Component<any, any> {
     {
         Header: 'Payable',
         accessor: 'rank',
-        maxWidth: 120,   
+        maxWidth: 120,
         minWidth: 50,
         filterable: false,
         Cell: (row) => (
@@ -179,11 +181,17 @@ export class NodeTable extends React.Component<any, any> {
 
         tableData = _.sortBy(tableData, 'rank');
 
+        const StyledTable = styled(ReactTable) `
+            background: white !important;
+            border-radius: 6px;
+            ${shadow()}
+        `;
+
         return (
             <div>
                 <NodeTableStatus data={this.props.data} />
-                <ReactTable
-                    className={'-highlight'}
+                <StyledTable
+                    className={'-highlight -striped'}
                     data={tableData}
                     columns={this.columns}
                     defaultPageSize={20}
