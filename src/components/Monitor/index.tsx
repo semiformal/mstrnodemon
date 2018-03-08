@@ -49,20 +49,6 @@ const MN_QUERY = gql`
       protocol,
       updatetime 
     }
-    a3: allMasternodes(skip: 2000) {
-      id,
-      status,
-      outpoint,
-      activeseconds,
-      id,
-      ip,
-      lastpaidblock,
-      lastpaidtime,
-      lastseen,
-      payee,
-      protocol,
-      updatetime 
-    }
   }
 `;
 
@@ -186,7 +172,7 @@ export default allNodes(({ data: data }) => {
   if (Boolean(data.error)) {
     return <div><h1>ERROR</h1><div>{data.error}</div></div>;    
   }
-  let allMasternodes = _.union(data.a1, data.a2, data.a3);
+  let allMasternodes = _.union(data.a1, data.a2);
   
   if (Boolean(allMasternodes)) {
     return (
