@@ -54,7 +54,7 @@ export class Navbar extends React.Component<any, any> {
                     </MenuStyled>
                 </LayoutHeader>
                 <LayoutContent
-                    style={{ padding: '12px 50px' }}
+                    style={{ padding: '5px 8px' }}
                     className="content"
                 >
                     {/* <Breadcrumb style={{ margin: '16px 0' }}>

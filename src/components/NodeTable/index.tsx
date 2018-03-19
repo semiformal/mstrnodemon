@@ -22,93 +22,6 @@ import { shadow } from '../../styles/style-utils';
 @inject(STORE_ROUTER)
 export class NodeTable extends React.Component<any, any> {
 
-    columns = [{
-        Header: 'IP',
-        accessor: 'ip',
-        minWidth: 100,
-        maxWidth: 150,
-        Cell: row => row.value.split(':')[0]
-    }, {
-        Header: 'Status',
-        accessor: 'status',
-        minWidth: 60,
-        maxWidth: 200
-    }, {
-        Header: 'Last Paid',
-        id: 'lastpaidtime',
-        accessor: d => d.lastpaidtime === 0 ? 'Never' : d.lastpaidtime,
-        minWidth: 50,
-        maxWidth: 150,
-        filterable: false,
-        Cell: row => this._timeToDuration(row.value),
-        sortMethod: (a, b, desc) => {
-            // force null, undefined, and 0 to the future
-            a = (a === null || a === undefined || a === 'Never') ? -Infinity : a;
-            b = (b === null || b === undefined || b === 'Never') ? -Infinity : b;
-            // Return either 1 or -1 to indicate a sort priority
-            if (a > b) {
-                return 1;
-            }
-            if (a < b) {
-                return -1;
-            }
-            // returning 0 or undefined will use any subsequent column sorting methods as a tiebreaker
-            return 0;
-        }
-    },
-    {
-        Header: 'Active Time',
-        accessor: 'activeseconds',
-        minWidth: 50,
-        maxWidth: 150,
-        filterable: false,
-        Cell: (row) => {
-            const dur = moment.duration(row.value * 1000);
-            return `
-            ${this._getUnit(dur, 'd', true)}
-            ${this._getUnit(dur, 'h', true)}
-            ${this._getUnit(dur, 'm', true)}
-            ${this._getUnit(dur, 's', false)}`;
-        }
-    },
-    {
-        Header: 'Last Seen',
-        accessor: 'lastseen',
-        minWidth: 50,
-        maxWidth: 120,
-        filterable: false,
-        Cell: (row) => this._timeToDuration(row.value),
-    },
-    {
-        Header: 'Payable',
-        accessor: 'rank',
-        maxWidth: 120,
-        minWidth: 50,
-        filterable: false,
-        Cell: (row) => (
-            <div className={classnames({ 'NodeTable-top10': false })}>
-                {row.original.top10 && row.original.issues.length === 0 ?
-                    <Icon type="check" className="NodeTable-top10-check" /> :
-                    row.value === 99999 ?
-                        <Icon type="close" className="NodeTable-top10-close" /> :
-                        row.value}
-            </div>
-        )
-    },
-    {
-        Header: 'issues',
-        accessor: 'issues',
-        filterable: false,
-        minWidth: 70,
-        maxWidth: 200,
-        Cell: (row) => (<div >{row.value.join(', ')}</div>)
-    },
-    {
-        Header: 'Payee',
-        accessor: 'payee',
-        minWidth: 30,
-        maxWidth: 300
-    }];
     // ,{
     //     Header: 'Protocol',
     //     accessor: 'protocol',
@@ -117,6 +30,21 @@ export class NodeTable extends React.Component<any, any> {
 
     constructor(props: any, context: any) {
         super(props, context);
+        this.state = { width: 0, height: 0 };
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
+    }
+
+    updateWindowDimensions() {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
     }
 
     render() {
@@ -124,6 +52,8 @@ export class NodeTable extends React.Component<any, any> {
         let iparray: string[] = [];
         let tableData = this.props.data as any[];
         let nMnCount = tableData.length;
+
+        let shouldShowMore = this.state.width >= 768;
 
         let nRank = 1;
         let nTenthNetwork = nMnCount / 10;
@@ -173,6 +103,95 @@ export class NodeTable extends React.Component<any, any> {
             return newItem;
         });
 
+        let columns = [{
+            Header: 'IP',
+            accessor: 'ip',
+            minWidth: 120,
+            maxWidth: 150,
+            Cell: row => row.value.split(':')[0]
+        }, {
+            Header: 'Status',
+            accessor: 'status',
+            minWidth: 60,
+            maxWidth: 200
+        }, {
+            Header: 'Last Paid',
+            id: 'lastpaidtime',
+            accessor: d => d.lastpaidtime === 0 ? 'Never' : d.lastpaidtime,
+            minWidth: 120,
+            maxWidth: 120,
+            filterable: false,
+            Cell: row => this._timeToDuration(row.value, true, false),
+            sortMethod: (a, b, desc) => {
+                // force null, undefined, and 0 to the future
+                a = (a === null || a === undefined || a === 'Never') ? -Infinity : a;
+                b = (b === null || b === undefined || b === 'Never') ? -Infinity : b;
+                // Return either 1 or -1 to indicate a sort priority
+                if (a > b) {
+                    return 1;
+                }
+                if (a < b) {
+                    return -1;
+                }
+                // returning 0 or undefined will use any subsequent column sorting methods as a tiebreaker
+                return 0;
+            }
+        },
+        {
+            Header: 'Active Time',
+            accessor: 'activeseconds',
+            minWidth: 150,
+            maxWidth: 150,
+            show: shouldShowMore,
+            filterable: false,
+            Cell: (row) => {
+                const dur = moment.duration(row.value * 1000);
+                return `
+                ${this._getUnit(dur, 'd', true)}
+                ${this._getUnit(dur, 'h', true)}
+                ${this._getUnit(dur, 'm', true)}`;
+            }
+        },
+        {
+            Header: 'Last Seen',
+            accessor: 'lastseen',
+            minWidth: 120,
+            maxWidth: 120,
+            show: shouldShowMore,
+            filterable: false,
+            Cell: (row) => this._timeToDuration(row.value),
+        },
+        {
+            Header: 'Payable',
+            accessor: 'rank',
+            minWidth: 60,
+            maxWidth: 120,
+            filterable: false,
+            Cell: (row) => (
+                <div className={classnames({ 'NodeTable-top10': false })}>
+                    {row.original.top10 && row.original.issues.length === 0 ?
+                        <Icon type="check" className="NodeTable-top10-check" /> :
+                        row.value === 99999 ?
+                            <Icon type="close" className="NodeTable-top10-close" /> :
+                            row.value}
+                </div>
+            )
+        },
+        {
+            Header: 'issues',
+            accessor: 'issues',
+            filterable: false,
+            show: shouldShowMore,
+            maxWidth: 200,
+            Cell: (row) => (<div >{row.value.join(', ')}</div>)
+        },
+        {
+            Header: 'Payee',
+            accessor: 'payee',
+            show: shouldShowMore,
+            maxWidth: 300
+        }];
+
         if (!_.isEmpty(ipliststring)) {
             _.each(ipliststring.split(','), d => iparray.push(d));
             tableData =
@@ -183,7 +202,7 @@ export class NodeTable extends React.Component<any, any> {
 
         const StyledTable = styled(ReactTable) `
             background: white !important;
-            border-radius: 6px;
+            border-radius: 6px;                              
             ${shadow()}
         `;
 
@@ -193,7 +212,7 @@ export class NodeTable extends React.Component<any, any> {
                 <StyledTable
                     className={'-highlight -striped'}
                     data={tableData}
-                    columns={this.columns}
+                    columns={columns}
                     defaultPageSize={20}
                     filterable={true}
                     defaultFilterMethod={(filter, row, column) => {
@@ -213,17 +232,17 @@ export class NodeTable extends React.Component<any, any> {
             return hideIfNull && val === 0 ? '' : `${val}${unit}`;
         }
 
-    private _timeToDuration = (value) => {
+    private _timeToDuration = (value, showMinutes: boolean = true, showSeconds: boolean = true) => {
         if (value === 'Never') {
             return 'Never';
         } else {
             let paidTime = moment.unix(value).utc();
             let dur = moment.duration(moment.utc().diff(paidTime));
             return `
-        ${this._getUnit(dur, 'd', true)}
-        ${this._getUnit(dur, 'h', true)}
-        ${this._getUnit(dur, 'm', true)}
-        ${this._getUnit(dur, 's', true)}`;
+                ${this._getUnit(dur, 'd', true)}
+                ${this._getUnit(dur, 'h', true)}
+                ${showMinutes ? this._getUnit(dur, 'm', true) : ''}
+                ${showSeconds ? this._getUnit(dur, 's', true) : ''}`;
         }
     }
 

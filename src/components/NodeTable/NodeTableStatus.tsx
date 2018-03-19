@@ -8,6 +8,7 @@ import { inject, observer } from 'mobx-react';
 // import { withRouter } from 'react-router-dom';
 // import { Header, Content, Footer } from 'antd/lib/layout';
 import { Icon } from 'antd';
+import styled from 'styled-components';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -40,21 +41,30 @@ export class NodeTableStatus extends React.Component<any, any> {
             window.location.reload();
         };
 
+        const Legend = styled.div`
+               
+        `;
+
+        const TableStatus = styled.div`
+            display: 'flow-root';
+            padding: '10px';
+        `;
+
         return (
-            <div style={{ display: 'flow-root', padding: '10px' }}>
-                <span style={alertStyle}>
+            <TableStatus style={{  }}>
+                <div style={alertStyle}>
                     Data from: {updatedTime.fromNow()}&nbsp;
-                </span>
+                </div>
                 {(oldData ?
                     <a onClick={refreshPage} style={{ paddingLeft: '5px', color: 'black' }}>
                         <Icon type="sync" /> refresh for new data
                     </a>
                     : null)
                 }
-                <span className="NodeTable-legend NodeTable-right">
+                <Legend>
                     <Icon type="check" className="NodeTable-top10-check" /> = Able to receive reward
-                </span>
-            </div >
+                </Legend>
+            </TableStatus >
         );
     }
 
