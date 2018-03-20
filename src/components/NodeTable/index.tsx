@@ -53,7 +53,7 @@ export class NodeTable extends React.Component<any, any> {
         let tableData = this.props.data as any[];
         let nMnCount = tableData.length;
 
-        let shouldShowMore = this.state.width >= 768;
+        let shouldShowMore = this.state.width >= 660;
 
         let nRank = 1;
         let nTenthNetwork = nMnCount / 10;
