@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
 import * as _ from 'lodash';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { NodeTable } from '../NodeTable';
-import { NodeCount } from '../NodeCount';
+import { NodeTable } from './NodeTable';
+import { NodeCount } from './NodeCount';
 import { MonitorLegend } from './MonitorLegend';
 
 // virtualized
@@ -116,7 +116,7 @@ class RenderData extends React.Component<any, any> {
   };
 
   constructor(props: any, context: any) {
-    super(props, context);
+    super(props, context);    
   }
 
   getChildContext() {
@@ -146,37 +146,19 @@ class RenderData extends React.Component<any, any> {
         <Row>
           <MonitorLegend />
         </Row>
-
       </div>);
-
-    // [
-    //   (
-    //     <div key="Intro" style={{ maxWidth: '600px' }}>
-    //       The data and status on this page does not consider every factor involved in Masternode status.
-    //       However, what it does display should be mostly accurate. If you see any errors or incorrect status
-    //       please contact me on&nbsp;
-    //       <a target="_blank" href="http://discordapp.com">discord</a> @ <b>semiformal#9897</b><br />
-    //       <br />
-    //     </div>
-    //   ),
-    //   <NodeCount key="Counts" /> ,
-    //   <NodeTable key="Table" data={this.props.nodes} /> ,
-    //   (
-    //     <div key="Legend">
-    //       The
-    //   </div>)
-    // ];
   }
 
-  getContent(row: number, col: number, data: Array<Masternode>) {
-    return _.values(data[row])[col];
-  }
+  // Not needed?
+  // getContent(row: number, col: number, data: Array<Masternode>) {      
+  //   return _.values(data[row])[col];    
+  // }  
 
 }
 
 export const allNodes = graphql<any>(MN_QUERY, {});
 
-export default allNodes(({ data: data }) => {
+export default allNodes(({ data: data }) => {  
   if (!data) {
     return <div>Data is bad</div>;
   }
@@ -184,10 +166,10 @@ export default allNodes(({ data: data }) => {
     return <div>Loading</div>;
   }
   if (Boolean(data.error)) {
-    return <div><h1>ERROR</h1><div>{data.error}</div></div>;    
+    return <div><h1>ERROR</h1><div>{data.error}</div></div>;
   }
   let allMasternodes = _.union(data.a1, data.a2, data.a3);
-  
+
   if (Boolean(allMasternodes)) {
     return (
       <RenderData nodes={allMasternodes} />

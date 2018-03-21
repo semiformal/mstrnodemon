@@ -32,7 +32,7 @@ type Response = {
     nodecount: any;
 };
 
-class NodeCountInner extends React.Component<any, any> {
+export class NodeCountInner extends React.Component<any, any> {
 
     render() {
 
@@ -52,7 +52,7 @@ class NodeCountInner extends React.Component<any, any> {
 
         const counts = this.props.data;
         return (
-            <NodeCountDiv>
+            <NodeCountDiv id="nodeCount">
                 <NodeCountSpan>Total</NodeCountSpan>: {counts.count}&nbsp;<br />
                 <NodeCountSpan>PreEnabled</NodeCountSpan>: {counts.PRE_ENABLED}&nbsp;&nbsp;
                 <NodeCountSpan>Enabled</NodeCountSpan>: {counts.ENABLED}&nbsp;&nbsp;

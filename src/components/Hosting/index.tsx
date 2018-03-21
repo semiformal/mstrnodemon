@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { STORE_TODO, STORE_ROUTER } from '../../constants/stores';
 import { RouterStore } from '../../stores/RouterStore';
 
-@inject(STORE_TODO, STORE_ROUTER)
+@inject(STORE_ROUTER)
 @observer
 export class Hosting extends React.Component {
 
