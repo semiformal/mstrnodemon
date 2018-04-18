@@ -16,17 +16,18 @@ import * as classnames from 'classnames';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as qs from 'qs';
-import styled from 'styled-components';
+import styled, { StyledFunction } from 'styled-components';
 import { shadow } from '../../styles/style-utils';
 
 @inject(STORE_ROUTER)
 export class NodeTable extends React.Component<any, any> {
 
-    // ,{
-    //     Header: 'Protocol',
-    //     accessor: 'protocol',
-    //     minWidth: 30
-    // }];
+    private customDiv: StyledFunction<any & React.HTMLProps<HTMLInputElement>> = styled.div;
+
+    // TODO: use real stypes and types
+    private ProtocolCell = this.customDiv`
+        color: ${(props: any) => props.updated ? '#237804' : '#ad2102'};
+    `;
 
     constructor(props: any, context: any) {
         super(props, context);
@@ -55,6 +56,7 @@ export class NodeTable extends React.Component<any, any> {
 
         let shouldShowMore = this.state.width >= 660;
 
+        let protocolCount = {};
         let nRank = 1;
         let nTenthNetwork = nMnCount / 10;
         let currTime = moment().unix().valueOf();
@@ -65,19 +67,20 @@ export class NodeTable extends React.Component<any, any> {
             let issues: string[] = [];
 
             // Currently WATCHDOG_EXPIRED is permited due to active sporks
-            if (item.status !== 'ENABLED' && item.status !== 'WATCHDOG_EXPIRED') {
+            if (item.status !== 'ENABLED') {
                 issues.push('Status');
             }
 
             // check protocol version
-            if (item.protocol <= 70206) {
-                issues.push('Protocol');
-            }
+            // if (item.protocol <= 70212) {
+            //     issues.push('Protocol');
+            // }
+
+            protocolCount[item.protocol] = (protocolCount[item.protocol] || 0) + 1;
 
             // TODO: it's in the list (up to 8 entries ahead of current block to allow propagation) -- so let's skip it
             // if(mnpayments.IsScheduled(mnpair.second, nBlockHeight)) continue;
 
-            // it's too new, wait for a cycle
             if ((sigTime + (nMnCount * 2.6 * 60)) > currTime) {
                 issues.push('ActiveTime');
             }
@@ -103,6 +106,21 @@ export class NodeTable extends React.Component<any, any> {
             return newItem;
         });
 
+        let nCount = _.filter(tableData, (item: any) => item.issues.length === 0).length;
+        nRank = 1;
+        let isUpgrading = nCount < (nMnCount / 3);
+        tableData = _.each(tableData, (item: any, idx: number) => {
+
+            if (isUpgrading) {
+                item.issues = _.filter(item.issues, (item2: any) => item2 !== 'ActiveTime');
+            }
+
+            if (item.issues.length === 0) {
+                item.rank = nRank++;
+                item.top10 = Boolean(nRank < nTenthNetwork);
+            }
+        });
+
         let columns = [{
             Header: 'IP',
             accessor: 'ip',
@@ -112,9 +130,16 @@ export class NodeTable extends React.Component<any, any> {
         }, {
             Header: 'Status',
             accessor: 'status',
-            minWidth: 60,
+            minWidth: 50,
             maxWidth: 200
         }, {
+            Header: 'Protocol',
+            accessor: 'protocol',
+            minWidth: 40,
+            Cell: row => <this.ProtocolCell updated={row.value >= 70213}>{row.value}</this.ProtocolCell>
+            // show: shouldShowMore
+        },
+        {
             Header: 'Last Paid',
             id: 'lastpaidtime',
             accessor: d => d.lastpaidtime === 0 ? 'Never' : d.lastpaidtime,
@@ -206,8 +231,45 @@ export class NodeTable extends React.Component<any, any> {
             ${shadow()}
         `;
 
+        const UpgradeStatus = styled.div`
+            margin-top: 3px;
+            padding: 2px;
+            padding-left: 10px;
+            font-weight: bold;                        
+            background: white !important;
+            border-radius: 6px;                              
+            ${shadow()}
+        `;
+
+        let ProtocolCount = styled.span`
+            font-weight: normal;
+        `;
+
+        let s = (
+            <div>Protocol Counts:&nbsp;
+                {_.map(
+                    _.keys(protocolCount),
+                    (item) =>
+                        <span key={item}>
+                            &nbsp;&nbsp;{item}:&nbsp;
+                            <ProtocolCount key={item}>{protocolCount[item]}</ProtocolCount>
+                        </span>
+                )}
+
+            </div>);
+
+        let upgradeMessage = isUpgrading ? (
+            <UpgradeStatus>
+                Network is currently upgrading.&nbsp;
+                The ActiveTime requirement is no longer applied.&nbsp;
+                Qualifying ({nCount}) is less than Total / 3 ({Math.round(nMnCount / 3)}).<br />
+                {s}
+            </UpgradeStatus>) :
+            null;
+
         return (
             <div>
+                {upgradeMessage}
                 <NodeTableStatus data={this.props.data} />
                 <StyledTable
                     className={'-highlight -striped'}

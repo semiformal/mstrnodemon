@@ -13,6 +13,8 @@ import 'react-table/react-table.css';
 import { NodeTable } from './NodeTable';
 import { NodeCount } from './NodeCount';
 import { MonitorLegend } from './MonitorLegend';
+import styled from 'styled-components';
+import { shadow } from '../../styles/style-utils';
 
 // virtualized
 import 'react-virtualized/styles.css';
@@ -50,6 +52,20 @@ const MN_QUERY = gql`
       updatetime 
     }
     a3: allMasternodes(skip: 2000) {
+      id,
+      status,
+      outpoint,
+      activeseconds,
+      id,
+      ip,
+      lastpaidblock,
+      lastpaidtime,
+      lastseen,
+      payee,
+      protocol,
+      updatetime 
+    }
+    a4: allMasternodes(skip: 3000) {
       id,
       status,
       outpoint,
@@ -116,7 +132,7 @@ class RenderData extends React.Component<any, any> {
   };
 
   constructor(props: any, context: any) {
-    super(props, context);    
+    super(props, context);
   }
 
   getChildContext() {
@@ -126,17 +142,25 @@ class RenderData extends React.Component<any, any> {
   }
 
   render() {
+    const PromoDiv = styled.div`
+      width: 400px;      
+      background-color: white;
+      padding: 20px;
+      border-radius: 6px;      
+      ${shadow()}
+    `;
     return (
       <div>
         <Row>
-          <Col span={22} offset={1}>
-            The data and status on this page does not consider every factor involved in Masternode status.
-              However, what it does display should be mostly accurate. If you see any errors or incorrect status
-              please contact me on&nbsp;
-              <a target="_blank" href="http://discordapp.com">discord</a> @ <b>semiformal#9897</b><br />
-            <br />
+          <Col span={11} offset={1}>
+            <PromoDiv>
+              Enjoy this site and want to see more updates?
+              <br />Support the $PAC Innovation team and vote!<br />
+              <a target="_blank" href="https://masternodes.work/innovation">https://masternodes.work/innovation</a>
+            </PromoDiv>
           </Col>
         </Row>
+        <br />
         <Row>
           <NodeCount key="Counts" />
         </Row>
@@ -144,8 +168,23 @@ class RenderData extends React.Component<any, any> {
           <NodeTable key="Table" data={this.props.nodes} />
         </Row>
         <Row>
+          {/* <Col span={22} offset={1}>
+            The data and status on this page does not consider every factor involved in Masternode status.
+              However, what it does display should be mostly accurate. If you see any errors or incorrect status
+              please contact me on&nbsp;
+              <a target="_blank" href="http://discordapp.com">discord</a> @ <b>semiformal#9897</b><br />
+            <br />
+          </Col> */}
+          <Col span={22} offset={1}>
+          <br/>
+            If you see any errors or incorrect status please contact me on&nbsp;
+              <a target="_blank" href="http://discordapp.com">discord</a> @ <b>semiformal#9897</b><br />            
+          </Col>
+        </Row>
+        <Row>
           <MonitorLegend />
         </Row>
+
       </div>);
   }
 
@@ -158,7 +197,7 @@ class RenderData extends React.Component<any, any> {
 
 export const allNodes = graphql<any>(MN_QUERY, {});
 
-export default allNodes(({ data: data }) => {  
+export default allNodes(({ data: data }) => {
   if (!data) {
     return <div>Data is bad</div>;
   }
@@ -168,7 +207,7 @@ export default allNodes(({ data: data }) => {
   if (Boolean(data.error)) {
     return <div><h1>ERROR</h1><div>{data.error}</div></div>;
   }
-  let allMasternodes = _.union(data.a1, data.a2, data.a3);
+  let allMasternodes = _.union(data.a1, data.a2, data.a3, data.a4);
 
   if (Boolean(allMasternodes)) {
     return (
