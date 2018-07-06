@@ -52,7 +52,8 @@ export class NodeTable extends React.Component<any, any> {
         let ipliststring = qs.parse(this.props.router.location.search.substr(1)).iplist;
         let iparray: string[] = [];
         let tableData = this.props.data as any[];
-        let nMnCount = tableData.length;
+        let nMnCount = _.filter(tableData, (item) => item.protocol >= 70213).length;
+        // let nMnCount = tableData.length;
 
         let shouldShowMore = this.state.width >= 660;
 
@@ -60,6 +61,7 @@ export class NodeTable extends React.Component<any, any> {
         let nRank = 1;
         let nTenthNetwork = nMnCount / 10;
         let currTime = moment().unix().valueOf();
+        let activeTimeRequirement = nMnCount * 2.6;
         tableData = _.sortBy(tableData, 'lastpaidblock');
         tableData = _.map(tableData, (item: any, idx: number) => {
 
@@ -72,16 +74,16 @@ export class NodeTable extends React.Component<any, any> {
             }
 
             // check protocol version
-            // if (item.protocol <= 70212) {
-            //     issues.push('Protocol');
-            // }
+            if (item.protocol <= 70212) {
+                issues.push('Protocol');
+            }
 
             protocolCount[item.protocol] = (protocolCount[item.protocol] || 0) + 1;
 
             // TODO: it's in the list (up to 8 entries ahead of current block to allow propagation) -- so let's skip it
             // if(mnpayments.IsScheduled(mnpair.second, nBlockHeight)) continue;
 
-            if ((sigTime + (nMnCount * 2.6 * 60)) > currTime) {
+            if ((sigTime + (activeTimeRequirement * 60)) > currTime) {
                 issues.push('ActiveTime');
             }
 
@@ -106,9 +108,10 @@ export class NodeTable extends React.Component<any, any> {
             return newItem;
         });
 
+        // TODO: This isn't quite right. 
         let nCount = _.filter(tableData, (item: any) => item.issues.length === 0).length;
         nRank = 1;
-        let isUpgrading = nCount < (nMnCount / 3);
+        let isUpgrading = nCount < (nMnCount / 3);                
         tableData = _.each(tableData, (item: any, idx: number) => {
 
             if (isUpgrading) {
@@ -172,6 +175,7 @@ export class NodeTable extends React.Component<any, any> {
             Cell: (row) => {
                 const dur = moment.duration(row.value * 1000);
                 return `
+                ${this._getUnit(dur, 'M', true)}
                 ${this._getUnit(dur, 'd', true)}
                 ${this._getUnit(dur, 'h', true)}
                 ${this._getUnit(dur, 'm', true)}`;
@@ -301,6 +305,7 @@ export class NodeTable extends React.Component<any, any> {
             let paidTime = moment.unix(value).utc();
             let dur = moment.duration(moment.utc().diff(paidTime));
             return `
+                ${this._getUnit(dur, 'M', true)}
                 ${this._getUnit(dur, 'd', true)}
                 ${this._getUnit(dur, 'h', true)}
                 ${showMinutes ? this._getUnit(dur, 'm', true) : ''}

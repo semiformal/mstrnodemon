@@ -79,6 +79,34 @@ const MN_QUERY = gql`
       protocol,
       updatetime 
     }
+    a5: allMasternodes(skip: 4000) {
+      id,
+      status,
+      outpoint,
+      activeseconds,
+      id,
+      ip,
+      lastpaidblock,
+      lastpaidtime,
+      lastseen,
+      payee,
+      protocol,
+      updatetime 
+    }
+    # a6: allMasternodes(skip: 5000) {
+    #   id,
+    #   status,
+    #   outpoint,
+    #   activeseconds,
+    #   id,
+    #   ip,
+    #   lastpaidblock,
+    #   lastpaidtime,
+    #   lastseen,
+    #   payee,
+    #   protocol,
+    #   updatetime 
+    # }
   }
 `;
 
@@ -207,7 +235,7 @@ export default allNodes(({ data: data }) => {
   if (Boolean(data.error)) {
     return <div><h1>ERROR</h1><div>{data.error}</div></div>;
   }
-  let allMasternodes = _.union(data.a1, data.a2, data.a3, data.a4);
+  let allMasternodes = _.union(data.a1, data.a2, data.a3, data.a4, data.a5);
 
   if (Boolean(allMasternodes)) {
     return (
