@@ -260,8 +260,11 @@ export default allNodes(({ data: data }) => {
   if (Boolean(data.loading)) {
     return <div>Loading</div>;
   }
-  if (Boolean(data.error)) {
-    return <div><h1>ERROR</h1><div>{data.error}</div></div>;
+  if (Boolean(data.error)) {    
+    return (
+    <div><h1>ERROR</h1>
+        <div>Sorry! Backend data service is offline. <br/>Error Message: {data.error && data.error.message}</div>
+    </div>);
   }
   let allMasternodes = _.union(data.a1, data.a2, data.a3, data.a4, data.a5, data.a6, data.a7, data.a8);
 
